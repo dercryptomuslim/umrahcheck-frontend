@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕌 UmrahCheck - KI-gestützte Umrah-Beratung</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8f5f0 0%, #ede5d8 100%);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Islamic Pattern Background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.05'%3E%3Cpath d='M30 30l15-15v30zM15 15l15 15-15 15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 40px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D4AF37 0%, #B8941F 100%);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .progress-step.active {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+        
+        .progress-step.completed {
+            background: #1E3A8A;
+            color: white;
+        }
+        
+        /* Card Styling */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .card h1 {
+            text-align: center;
+            color: #1E3A8A;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .card h2 {
+            text-align: center;
+            color: #1E3A8A;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-text {
+            text-align: center;
+            color: #4b5563;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            color: #D4AF37;
+            font-weight: 600;
+        }
+        
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+        
+        .error {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        /* Button Styling */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-back {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-back:hover {
+            background: #4b5563;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(30, 58, 138, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Step Content */
+        .step {
+            display: none;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        /* Features List */
+        .features {
+            list-style: none;
+            margin: 30px 0;
+        }
+        
+        .features li {
+            padding: 8px 0;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+        }
+        
+        .features li:before {
+            content: "–";
+            color: #D4AF37;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        /* Privacy Notice */
+        .privacy-notice {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+        
+        .privacy-notice strong {
+            color: #1E3A8A;
+        }
+        
+        /* Islamic Greeting */
+        .islamic-greeting {
+            text-align: center;
+            color: #D4AF37;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 30px 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .btn-container {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-step active" data-step="1">1</div>
+            <div class="progress-step" data-step="2">2</div>
+            <div class="progress-step" data-step="3">3</div>
+            <div class="progress-step" data-step="4">4</div>
+            <div class="progress-step" data-step="5">5</div>
+        </div>
+
+        <!-- Step 1: Welcome -->
+        <div class="step active" id="step1">
+            <div class="card">
+                <div class="islamic-greeting">Assalamu alaikum & herzlich willkommen beim Umrah KI Berater!</div>
+                <div class="welcome-text">
+                    Starte jetzt deine <span class="highlight">kostenlose & unverbindliche</span> Umrah-Analyse in wenigen Schritten.<br>
+                    <strong>Was erwartet dich?</strong>
+                </div>
+                <ul class="features">
+                    <li>Persönliche Empfehlungen</li>
+                    <li>Anbieter-Preisvergleich</li>
+                    <li>100% kostenlos & anonym</li>
+                </ul>
+                <div class="btn-container">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextStep()">Jetzt starten</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Personal Data -->
+        <div class="step" id="step2">
+            <div class="card">
+                <h2>Persönliche Daten</h2>
+                <form id="personalForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Vorname *</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="z.B. Mohamed" required>
+                            <div class="error" id="firstNameError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Nachname *</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="z.B. Ali" required>
+                            <div class="error" id="lastNameError"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">E-Mail *</label>
+                            <input type="email" id="email" name="email" placeholder="z.B. dein.name@email.de" required>
+                            <div class="error" id="emailError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp-Nummer *</label>
+                            <input type="tel" id="whatsapp" name="whatsapp" placeholder="z.B. +49 151 12345678" required>
+                            <div class="error" id="whatsappError"></div>
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-container">
+                    <button class="btn btn-back" onclick="prevStep()">Zurück</button>
+                    <button class="btn btn-next" onclick="nextStep()">Weiter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Travel Data -->
+        <div class="step" id="step3">
+            <div class="card">
+                <h2>Reisedaten</h2>
+                <form id="travelForm">
+                    <div class="form-group">
+                        <label for="departure">Abflugort (Stadt) *</label>
+                        <input type="text" id="departure" name="departure" placeholder="z.B. Frankfurt" required>
+                        <div class="error" id="departureError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrival">Zielflughafen (z.B. JED, MED) *</label>
+                        <input type="text" id="arrival" name="arrival" placeholder="z.B. JED" required>
+                        <div class="error" id="arrivalError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="departureDate">Geplantes Abflugdatum *</label>
+                        <input type="date" id="departureDate" name="departureDate" required>
+                        <div class="error" id="departureDateError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flexibility">Flexibilität +/- Tage</label>
+                        <input type="number" id="flexibility" name="flexibility" placeholder="z.B. 3" min="0" max="14">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nightsMekka">Wie viele Nächte in Mekka? *</label>
+                            <input type="number" id="nightsMekka" name="nightsMekka" placeholder="z.B. 5" min="1" max="30" required>
+                            <div class="error" id="nightsMekkaError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nightsMedina">Wie viele Nächte in Medina? *</label>
+                            <input type="number" id="nightsMedina" name="nightsMedina" placeholder="z.B. 4" min="0" max="30" required>
+                            <div class="error" id="nightsMedinaError"></div>
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-container">
+                    <button class="btn btn-back" onclick="prevStep()">Zurück</button>
+                    <button class="btn btn-next" onclick="nextStep()">Weiter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Budget/Group -->
+        <div class="step" id="step4">
+            <div class="card">
+                <h2>Gruppengröße/Budget</h2>
+                <form id="budgetForm">
+                    <div class="form-group">
+                        <label for="persons">Wie viele Personen reisen? *</label>
+                        <select id="persons" name="persons" required>
+                            <option value="">Anzahl der Person</option>
+                            <option value="1">1 Person</option>
+                            <option value="2">2 Personen</option>
+                            <option value="3">3 Personen</option>
+                            <option value="4">4 Personen</option>
+                            <option value="5">5 Personen</option>
+                            <option value="6">6 Personen</option>
+                            <option value="7">7 Personen</option>
+                            <option value="8">8 Personen</option>
+                            <option value="9">9 Personen</option>
+                            <option value="10">10+ Personen</option>
+                        </select>
+                        <div class="error" id="personsError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget">Welches Budget steht pro Person zur Verfügung? *</label>
+                        <input type="number" id="budget" name="budget" placeholder="Ihr geplantes Budget pro Person in Euro" min="500" max="10000" required>
+                        <div class="error" id="budgetError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nationality">Staatsangehörigkeit</label>
+                        <input type="text" id="nationality" name="nationality" placeholder="Staatsangehörigkeit">
+                    </div>
+                    <div class="form-group">
+                        <label for="specialRequests">Anmerkungen/Sonderwünsche</label>
+                        <textarea id="specialRequests" name="specialRequests" rows="4" placeholder="Hier besondere Wünsche oder Anmerkungen eintragen (optional)"></textarea>
+                    </div>
+                </form>
+                <div class="btn-container">
+                    <button class="btn btn-back" onclick="prevStep()">Zurück</button>
+                    <button class="btn btn-next" onclick="nextStep()">Weiter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Final Submission -->
+        <div class="step" id="step5">
+            <div class="card">
+                <h2>Zusätzliche Informationen (letzte Seite)</h2>
+                <div class="privacy-notice">
+                    <strong>Datenschutz</strong><br>
+                    Wir verwenden deine persönlichen Daten ausschließlich, um deine Umrah-Anfrage zu bearbeiten und dich ggf. zu Angeboten oder relevanten Inhalten per E-Mail oder Telefon/WhatsApp zu kontaktieren. Deine Daten werden vertraulich behandelt und nicht an Dritte weitergegeben, außer es ist für die Angebotserstellung oder Buchung notwendig. Mit Absenden bestätigst du, dass du unsere Datenschutzerklärung gelesen und akzeptiert hast.
+                </div>
+                <div class="btn-container">
+                    <button class="btn btn-back" onclick="prevStep()">Zurück</button>
+                    <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">🚀 Umrah-Analyse starten</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="step" id="success" style="display: none;">
+            <div class="card">
+                <div class="islamic-greeting">Barakallahu feeki/feek!</div>
+                <h2>🤖 Unsere KI analysiert deine Umrah-Anfrage...</h2>
+                <div class="welcome-text">
+                    <div style="text-align: center; margin: 30px 0;">
+                        <div class="spinner"></div>
+                        <p style="font-size: 1.1rem; color: #1E3A8A; font-weight: 600;">
+                            ⏱️ Analyse läuft... (ca. 2-3 Minuten)
+                        </p>
+                    </div>
+                    
+                    <div style="background: #f0f8ff; padding: 25px; border-radius: 12px; border-left: 4px solid #D4AF37; margin: 25px 0;">
+                        <h3 style="color: #1E3A8A; margin-bottom: 15px;">🔍 Was unsere KI gerade prüft:</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 8px 0; color: #4b5563;">✓ <strong>Zeitraum-Optimierung:</strong> Ist dein Reisedatum ideal für Umrah?</li>
+                            <li style="padding: 8px 0; color: #4b5563;">✓ <strong>Budget-Analyse:</strong> Reicht dein Budget für eine komfortable Umrah?</li>
+                            <li style="padding: 8px 0; color: #4b5563;">✓ <strong>Live Flugpreise:</strong> 300+ Airlines mit EUR-Conversion durchsuchen</li>
+                            <li style="padding: 8px 0; color: #4b5563;">✓ <strong>Hotel-Matching:</strong> Beste Hotels in Mekka & Medina für dich</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="text-align: center; background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: white; padding: 25px; border-radius: 12px; margin: 25px 0;">
+                        <h3 style="margin-bottom: 15px;">🎯 Dein maßgeschneidertes Angebot (nur €39)</h3>
+                        <p style="margin-bottom: 20px;">Nach der Analyse erhältst du:</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; text-align: left;">
+                            <div>
+                                <strong>✈️ 3 Flugoptionen</strong><br>
+                                <small>Live-Preise, EUR-konvertiert</small>
+                            </div>
+                            <div>
+                                <strong>🕋 3 Hotels Mekka</strong><br>
+                                <small>In deinem Budget-Rahmen</small>
+                            </div>
+                            <div>
+                                <strong>🌙 3 Hotels Medina</strong><br>
+                                <small>Beste Lage & Preis-Leistung</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; background: #e8f5e8; padding: 20px; border-radius: 10px; border: 2px solid #22c55e;">
+                        <h3 style="color: #16a34a; margin-bottom: 10px;">💰 Unser Versprechen</h3>
+                        <p style="color: #16a34a; font-weight: 600; margin-bottom: 5px;">
+                            Wir sind <strong>garantiert günstiger</strong> als jede Reiseorganisation!
+                        </p>
+                        <p style="color: #4b5563; font-size: 0.9rem;">
+                            Durchschnittlich sparen unsere Kunden <strong>150-400€ pro Person</strong>
+                        </p>
+                    </div>
+                    
+                    <p style="text-align: center; margin-top: 30px; color: #6b7280;">
+                        📧 Du erhältst in wenigen Minuten eine E-Mail mit deiner persönlichen Analyse und dem Link zum Premium-Angebot.
+                    </p>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="premium_offer.html" 
+                           style="display: inline-block; background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: white; text-decoration: none; padding: 15px 30px; border-radius: 50px; font-weight: 600; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3); transition: all 0.3s ease;" 
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212, 175, 55, 0.4)'"
+                           onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.3)'">
+                            🚀 Premium-Angebot jetzt ansehen (39€)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+        let formData = {};
+        
+        // API Base URLs
+        const API_BASE = 'http://localhost:8000';
+        
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressFill.style.width = progress + '%';
+            
+            // Update step indicators
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                const stepNumber = index + 1;
+                step.classList.remove('active', 'completed');
+                
+                if (stepNumber < currentStep) {
+                    step.classList.add('completed');
+                } else if (stepNumber === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
+        
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            const targetStep = document.getElementById('step' + step) || document.getElementById(step);
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
+            updateProgress();
+        }
+        
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        
+        function validateCurrentStep() {
+            clearErrors();
+            
+            switch(currentStep) {
+                case 1:
+                    return true;
+                case 2:
+                    return validatePersonalData();
+                case 3:
+                    return validateTravelData();
+                case 4:
+                    return validateBudgetData();
+                case 5:
+                    return true;
+                default:
+                    return true;
+            }
+        }
+        
+        function validatePersonalData() {
+            let valid = true;
+            
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            
+            if (!firstName) {
+                showError('firstNameError', 'Vorname ist erforderlich!');
+                valid = false;
+            }
+            
+            if (!lastName) {
+                showError('lastNameError', 'Nachname ist erforderlich!');
+                valid = false;
+            }
+            
+            if (!email || !email.includes('@')) {
+                showError('emailError', 'Gültige E-Mail ist erforderlich!');
+                valid = false;
+            }
+            
+            if (!whatsapp) {
+                showError('whatsappError', 'WhatsApp-Nummer ist erforderlich!');
+                valid = false;
+            }
+            
+            if (valid) {
+                formData.firstName = firstName;
+                formData.lastName = lastName;
+                formData.email = email;
+                formData.whatsapp = whatsapp;
+            }
+            
+            return valid;
+        }
+        
+        function validateTravelData() {
+            let valid = true;
+            
+            const departure = document.getElementById('departure').value.trim();
+            const arrival = document.getElementById('arrival').value.trim();
+            const departureDate = document.getElementById('departureDate').value;
+            const nightsMekka = document.getElementById('nightsMekka').value;
+            const nightsMedina = document.getElementById('nightsMedina').value;
+            
+            if (!departure) {
+                showError('departureError', 'Abflugort ist erforderlich!');
+                valid = false;
+            }
+            
+            if (!arrival) {
+                showError('arrivalError', 'Zielflughafen ist erforderlich!');
+                valid = false;
+            }
+            
+            if (!departureDate) {
+                showError('departureDateError', 'Abflugdatum ist erforderlich!');
+                valid = false;
+            }
+            
+            if (!nightsMekka || nightsMekka < 1) {
+                showError('nightsMekkaError', 'Nächte in Mekka ist erforderlich!');
+                valid = false;
+            }
+            
+            if (nightsMedina === '' || nightsMedina < 0) {
+                showError('nightsMedinaError', 'Nächte in Medina ist erforderlich!');
+                valid = false;
+            }
+            
+            if (valid) {
+                formData.departure = departure;
+                formData.arrival = arrival;
+                formData.departureDate = departureDate;
+                formData.flexibility = document.getElementById('flexibility').value || 0;
+                formData.nightsMekka = parseInt(nightsMekka);
+                formData.nightsMedina = parseInt(nightsMedina);
+            }
+            
+            return valid;
+        }
+        
+        function validateBudgetData() {
+            let valid = true;
+            
+            const persons = document.getElementById('persons').value;
+            const budget = document.getElementById('budget').value;
+            
+            if (!persons) {
+                showError('personsError', 'Personenanzahl ist erforderlich!');
+                valid = false;
+            }
+            
+            if (!budget || budget < 500) {
+                showError('budgetError', 'Budget pro Person ist erforderlich!');
+                valid = false;
+            }
+            
+            if (valid) {
+                formData.persons = parseInt(persons);
+                formData.budget = parseInt(budget);
+                formData.nationality = document.getElementById('nationality').value.trim();
+                formData.specialRequests = document.getElementById('specialRequests').value.trim();
+            }
+            
+            return valid;
+        }
+        
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+        
+        function clearErrors() {
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+        }
+        
+        async function submitForm() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '🔄 Analysiere deine Umrah...';
+            
+            try {
+                // Format date as DD.MM.YYYY for n8n
+                const formatDate = (dateStr) => {
+                    const date = new Date(dateStr);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}.${month}.${year}`;
+                };
+                
+                // Prepare n8n webhook payload - exact format match
+                const n8nPayload = {
+                    first_name: formData.firstName,
+                    nachname: formData.lastName,
+                    email: formData.email,
+                    whatsappnummer: formData.whatsapp,
+                    "1-6-Personen": formData.persons <= 6 ? "Starter" : "Gruppe",
+                    abflugort: formData.departure,
+                    zielflughafen: formData.arrival,
+                    abflugdatum: formatDate(formData.departureDate),
+                    flexibilitaet: String(formData.flexibility || 0),
+                    mekka_nacht: String(formData.nightsMekka),
+                    medina_nacht: String(formData.nightsMedina),
+                    personenanzahl: String(formData.persons),
+                    budget: String(formData.budget),
+                    Staatsangehoerigkeit: formData.nationality || "deutsch",
+                    Anmerkungen: formData.specialRequests || "",
+                    "Accept-privacy-policy": "on",
+                    utm_source: "localhost_test",
+                    utm_medium: "webform",
+                    utm_campaign: "mvp_launch_2025",
+                    referrer_url: window.location.href
+                };
+                
+                console.log('Submitting to n8n webhook:', n8nPayload);
+                
+                // Send to local API which forwards to n8n webhook
+                const response = await fetch(`${API_BASE}/api/webhook-proxy`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        webhook_url: 'https://dercryptomuslim.app.n8n.cloud/webhook/umrah-lead-capture',
+                        payload: n8nPayload
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Response error:', errorText);
+                    throw new Error(`N8N Webhook Error: ${response.status} - ${errorText}`);
+                }
+                
+                const responseData = await response.json();
+                console.log('Webhook response:', responseData);
+                
+                console.log('Lead submitted successfully to n8n');
+                
+                // Also save to local API for backup
+                try {
+                    const backupPayload = {
+                        first_name: formData.firstName,
+                        last_name: formData.lastName,
+                        email: formData.email,
+                        whatsapp_number: formData.whatsapp,
+                        phone: formData.whatsapp,
+                        budget: formData.budget,
+                        budget_total: formData.budget * formData.persons,
+                        persons: formData.persons,
+                        departure_airport: formData.departure,
+                        arrival_airport: formData.arrival,
+                        departure_date: formData.departureDate,
+                        return_date: "",
+                        travel_dates: formData.departureDate,
+                        flight_preference: "economy",
+                        flexibility: formData.flexibility,
+                        nights_mekka: formData.nightsMekka,
+                        nights_medina: formData.nightsMedina,
+                        total_nights: formData.nightsMekka + formData.nightsMedina,
+                        nationality: formData.nationality || "deutsch",
+                        special_requests: formData.specialRequests || "",
+                        marketing_source: "webflow_funnel_n8n"
+                    };
+                    
+                    await fetch(`${API_BASE}/api/leads`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(backupPayload)
+                    });
+                    
+                    console.log('Backup saved to local API');
+                } catch (backupError) {
+                    console.warn('Backup to local API failed:', backupError);
+                    // Don't fail the main flow if backup fails
+                }
+                
+                // Show success page
+                currentStep = 6;
+                document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+                document.getElementById('success').classList.add('active');
+                
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert(`Es gab einen Fehler beim Senden: ${error.message}. Bitte versuche es erneut.`);
+                
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Umrah-Analyse starten';
+            }
+        }
+        
+        // Set minimum date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('departureDate').min = today;
+        });
+    </script>
+</body>
+</html>
