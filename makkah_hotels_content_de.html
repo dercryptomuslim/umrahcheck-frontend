@@ -1,0 +1,726 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beste Halal Hotels in Mekka - UmrahCheck</title>
+    <meta name="description" content="Entdecken Sie die besten Halal-Hotels in Mekka nahe dem Heiligen Haram. Premium-Unterkünfte mit Gebetseinrichtungen, Halal-Dining und außergewöhnlichem Service für Pilger.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .logo-text {
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-subtitle {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: -5px;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hotels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        .hotel-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .hotel-card h2 {
+            color: #333;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .hotel-card h3 {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+        
+        .hotel-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .star-rating {
+            background: linear-gradient(45deg, #ffd700, #ffed4a);
+            color: #333;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .budget-category {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .description p {
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .proximity-info h4,
+        .halal-amenities h4 {
+            color: #333;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .proximity-info h4:before {
+            content: "📍";
+            font-size: 1.2rem;
+        }
+        
+        .halal-amenities h4:before {
+            content: "🕌";
+            font-size: 1.2rem;
+        }
+        
+        .proximity-info ul,
+        .halal-amenities ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+        
+        .proximity-info li,
+        .halal-amenities li {
+            color: #555;
+            margin-bottom: 0.3rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+        
+        .proximity-info li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .halal-amenities li:before {
+            content: "🌙";
+            position: absolute;
+            left: 0;
+        }
+        
+        .booking-info {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .booking-info p {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .book-now-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            margin-top: 0.5rem;
+        }
+        
+        .book-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .logo {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hotels-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">UC</div>
+                <div>
+                    <div class="logo-text">UmrahCheck</div>
+                    <div class="logo-subtitle">Premium Halal Hotels</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Beste Halal Hotels in Mekka</h1>
+        <div class="hotels-grid">
+
+            <article class="hotel-card">
+                <h2>Dar Al Ghufran - Al Safwah Towers Hotel</h2>
+                <h3>دار الغفران- فندق برج الصفاء</h3>
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Dar Al Ghufran - Al Safwah Towers Hotel, einem prestigeträchtigen 5-Star Hotel nur 350m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 4 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 350m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 350m</p>
+                    <p><strong>Walking Time:</strong> 4 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Swissôtel Makkah</h2>
+                <h3>فندق سويس اوتيل</h3>
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Swissôtel Makkah, einem prestigeträchtigen 5-Star Hotel nur 462m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 6 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 462m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 462m</p>
+                    <p><strong>Walking Time:</strong> 6 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Swissôtel Al Maqam Makkah</h2>
+                <h3>سويت هوتيل المقام</h3>
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Swissôtel Al Maqam Makkah, einem prestigeträchtigen 5-Star Hotel nur 484m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 6 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 484m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 484m</p>
+                    <p><strong>Walking Time:</strong> 6 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Hilton Suites Makkah</h2>
+                <h3>هلتن للأجنحة</h3>
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Hilton Suites Makkah, einem prestigeträchtigen 5-Star Hotel nur 506m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 6 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 506m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 506m</p>
+                    <p><strong>Walking Time:</strong> 6 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Elaf Kinda Hotel</h2>
+                <h3>فندق إيلاف كندة</h3>
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Elaf Kinda Hotel, einem prestigeträchtigen 5-Star Hotel nur 458m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 6 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 458m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 458m</p>
+                    <p><strong>Walking Time:</strong> 6 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Mövenpick Hotel & Residence Hajar Tower Makkah</h2>
+                <h3>فندق وريزيدنس موفنبيك برج هاجر</h3>
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Mövenpick Hotel & Residence Hajar Tower Makkah, einem prestigeträchtigen 5-Star Hotel nur 467m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 6 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 467m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 467m</p>
+                    <p><strong>Walking Time:</strong> 6 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Raffles Makkah Palace</h2>
+                
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Raffles Makkah Palace, einem prestigeträchtigen 5-Star Hotel nur 386m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 5 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 386m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 386m</p>
+                    <p><strong>Walking Time:</strong> 5 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Makkah Millennium Towers</h2>
+                
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Makkah Millennium Towers, einem prestigeträchtigen 5-Star Hotel nur 387m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 5 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 387m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 387m</p>
+                    <p><strong>Walking Time:</strong> 5 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Dar Al Eiman Royal Hotel</h2>
+                
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Dar Al Eiman Royal Hotel, einem prestigeträchtigen 5-Star Hotel nur 408m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 5 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 408m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 408m</p>
+                    <p><strong>Walking Time:</strong> 5 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+            <article class="hotel-card">
+                <h2>Hilton Hotel & Convention Jabal Omar Makkah</h2>
+                <h3>فندق ومركز مؤتمرات هيلتون جبل عمر مكة</h3>
+                <div class="hotel-meta">
+                    <span class="star-rating">5-Star</span>
+                    <span class="budget-category">Ultra-Luxury</span>
+                </div>
+                
+                <div class="description">
+                    <p>Erleben Sie unvergleichlichen Luxus im Hilton Hotel & Convention Jabal Omar Makkah, einem prestigeträchtigen 5-Star Hotel nur 660m vom Heiligen Haram entfernt. Diese Ultra-Luxury Unterkunft bietet weltklasse Halal-Annehmlichkeiten und außergewöhnlichen Service für Pilger und Reisende.</p>
+                </div>
+                
+                <div class="proximity-info">
+                    <h4>Prime Location Benefits:</h4>
+                    <ul>
+                        <li>Nur 8 Minuten zu Fuß zum Heiligen Haram</li>
+                        <li>Erstklassige Lage 660m von der Masjid al-Haram</li>
+                        <li>Einfacher Zugang zu heiligen Stätten und Einkaufsgebieten</li>
+                        <li>Gut angebunden an Mekkas Verkehrsnetz</li>
+
+                    </ul>
+                </div>
+                
+                <div class="halal-amenities">
+                    <h4>Halal Amenities:</h4>
+                    <ul>
+                        <li>Gebetsraum mit Qibla-Richtung</li>
+                        <li>Halal-zertifizierte Restaurants</li>
+                        <li>Alkoholfreie Umgebung</li>
+                        <li>24/7 Gebetszeit-Ankündigungen</li>
+                        <li>Getrennte Schwimmeinrichtungen</li>
+                        <li>Islamische Gebetsteppiche in Zimmern</li>
+                        <li>Halal-Frühstücksoptionen</li>
+                        <li>Familienfreundliche Atmosphäre</li>
+
+                    </ul>
+                </div>
+                
+                <div class="booking-info">
+                    <p><strong>Distance to Haram:</strong> 660m</p>
+                    <p><strong>Walking Time:</strong> 8 minutes</p>
+                    <button class="book-now-btn">Book Now</button>
+                </div>
+            </article>
+
+        </div>
+    </main>
+</body>
+</html>
